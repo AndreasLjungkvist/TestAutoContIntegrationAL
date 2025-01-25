@@ -5,7 +5,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import org.junit.*;
 import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,7 +21,7 @@ import java.util.List;
 public class MyStepdefs {
 
     //private NewSupportAccount basketballEngland;
-    private String browser, firstName, lastName, email,password;
+    private String browser, firstName, lastName, email, password;
     private WebDriver driver;
 
 
@@ -25,11 +29,11 @@ public class MyStepdefs {
     public void iAmTryingToJoinTheWebpage(String browser) {
         this.browser = browser;
 
-        if (browser.equals("Chrome")){
+        if (browser.equals("Chrome")) {
             driver = new ChromeDriver();
         } else if (browser.equals("Firefox")) {
             driver = new FirefoxDriver();
-        }else
+        } else
             System.out.println("Invalid browser parameter");
     }
 
@@ -38,9 +42,19 @@ public class MyStepdefs {
         driver.get("https://membership.basketballengland.co.uk/newsupporteraccount");
     }
 
-    @Then("I should join the site successfully")
-    public void iShouldJoinTheSite() {
-       //String actual = basketballEngland.confirmProcess();
+    @Then("I should join the site {string}")
+    public void iShouldJoinTheSite(String success) {
+        String expected;
+
+        WebElement welcomeMessage = driver.findElement(By.cssSelector("h2[class='bold  gray  text-center  margin-bottom-40']"));
+        String actual = welcomeMessage.getText();
+
+        if (success.equals("yes")){
+             expected= "THANK YOU FOR CREATING AN ACCOUNT WITH BASKETBALL ENGLAND";
+        }else {
+            expected = "";
+        }
+        assertEquals(expected,actual);
     }
 
     @And("select a date")
@@ -51,9 +65,9 @@ public class MyStepdefs {
         datePicker.click();
         WebElement datePickerPrev = driver.findElement(By.cssSelector(".datepicker-months .prev"));
         WebElement yearDate = driver.findElement(By.cssSelector(".datepicker-switch"));
-       for (int i =0;i < 19;i++){
-           datePickerPrev.click();
-       }
+        for (int i = 0; i < 19; i++) {
+            datePickerPrev.click();
+        }
         /*String year = yearDate.getText();
         while (!year.equals("1992")){
             datePickerPrev.click();
@@ -64,6 +78,7 @@ public class MyStepdefs {
         WebElement dayTwelve = driver.findElement(By.xpath("//td[contains(.,'12')]"));
         dayTwelve.click();
     }
+
     @And("fill in my {string} name")
     public void fillInMyFirstName(String firstName) {
         this.firstName = firstName;
@@ -83,7 +98,7 @@ public class MyStepdefs {
     @And("fill in my email")
     public void fillInMyEmail() {
         Random rand = new Random();
-        email = firstName + rand.nextInt(100000)+"@gmail.com";
+        email = firstName + rand.nextInt(100000) + "@gmail.com";
         WebElement emailField = driver.findElement(By.cssSelector("[id='member_emailaddress']"));
         emailField.click();
         emailField.sendKeys(email);
@@ -92,29 +107,34 @@ public class MyStepdefs {
     @And("put in a password")
     public void putInAPassword() {
         Random rand = new Random();
-        for (int i =0; i< 9;i++){
+        for (int i = 0; i < 9; i++) {
             int number = rand.nextInt(25);
             char randomLetter = (char) ('A' + number);
             password += randomLetter;
         }
         password += rand.nextInt(1000);
 
-        WebElement emailField = driver.findElement(By.cssSelector("[id='signupunlicenced_password']"));
-        emailField.click();
-        emailField.sendKeys(password);
+        WebElement passwordField = driver.findElement(By.cssSelector("[id='signupunlicenced_password']"));
+        passwordField.click();
+        passwordField.sendKeys(password);
     }
 
-    @And("retype the password")
-    public void retypeThePassword() {
-        WebElement emailField = driver.findElement(By.cssSelector("[id='signupunlicenced_confirmpassword']"));
-        emailField.click();
-        emailField.sendKeys(password);
+    @And("retype the password {string}")
+    public void retypeThePassword(String retypePassword) {
+        WebElement passwordField = driver.findElement(By.cssSelector("[id='signupunlicenced_confirmpassword']"));
+        passwordField.click();
+        if (retypePassword.equals("incorrectly")) {
+            password = "incorrectPassword";
+        }
+        passwordField.sendKeys(password);
     }
 
-    @And("check off the terms and conditions")
-    public void checkOffTheTermsAndConditions() {
-        WebElement termsButton = driver.findElement(By.cssSelector(".md-checkbox > .md-checkbox:nth-child(1) .box"));
-        termsButton.click();
+    @And("{string} the terms and conditions")
+    public void checkOffTheTermsAndConditions(String check) {
+        if(check.equals("yes")) {
+            WebElement termsButton = driver.findElement(By.cssSelector(".md-checkbox > .md-checkbox:nth-child(1) .box"));
+            termsButton.click();
+        }
     }
 
     @And("check off being a legal age")

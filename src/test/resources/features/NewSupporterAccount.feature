@@ -12,15 +12,13 @@ Feature: NewSupporterAccount
     And fill in my email
     And confirm my email
     And put in a password
-    And retype the password
-    And check off the terms and conditions
+    And retype the password "<accordingly>"
+    And "<check>" the terms and conditions
     And check off being a legal age
     And check off having read the code of conduct
     And click confirm
-    Then I should join the site successfully
+    Then I should join the site "<successfully>"
 
     Examples:
-      | browser | first  | surname   |
-      | Chrome  | Johan  | Eriksson  |
-      | Firefox | Erik   | Johansson |
-      | Chrome  | Stefan | Olofsson  |
+      | browser | first | surname  | accordingly | check | successfully |
+      | Chrome  | Johan | Eriksson | correctly   | yes   | yes          |
