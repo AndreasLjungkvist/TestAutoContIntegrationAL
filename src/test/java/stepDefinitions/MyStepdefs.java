@@ -17,7 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MyStepdefs {
 
-    private String browser, firstName, lastName, email, password;
+    private String browser, firstName, surname, email, password;
     private WebDriver driver;
 
 
@@ -68,11 +68,18 @@ public class MyStepdefs {
     }
 
     @And("fill in my {string}")
-    public void fillInMyLastName(String lastName) {
-        this.lastName = lastName;
+    public void fillInMyLastName(String surname) {
+        this.surname = surname;
         WebElement firstNameField = driver.findElement(By.cssSelector("[id='member_lastname']"));
         firstNameField.click();
-        firstNameField.sendKeys(lastName);
+        firstNameField.sendKeys(surname);
+        firstNameField.submit();
+        if(surname.length()<3){
+            WebElement lastNameRequired = driver.findElement(By.cssSelector("span[for='member_lastname']"));
+            String actual = lastNameRequired.getText();
+            String expected= "Last Name is required";
+            assertEquals(expected,actual);
+        }
     }
 
     @And("fill in my email")
@@ -106,6 +113,13 @@ public class MyStepdefs {
             password = "incorrectPassword";
         }
         passwordField.sendKeys(password);
+        passwordField.submit();
+        if (retypePassword.equals("incorrectly")){
+            WebElement retypePasswordIncorrectly = driver.findElement(By.cssSelector("span[for='signupunlicenced_confirmpassword']"));
+            String actual = retypePasswordIncorrectly.getText();
+            String expected= "Password did not match";
+            assertEquals(expected,actual);
+        }
     }
 
     @And("{string} the terms and conditions")
@@ -113,6 +127,11 @@ public class MyStepdefs {
         if(check.equals("yes")) {
             WebElement termsButton = driver.findElement(By.cssSelector(".md-checkbox > .md-checkbox:nth-child(1) .box"));
             termsButton.click();
+        } else if (check.equals("no")) {
+            WebElement termsNotAgreed = driver.findElement(By.cssSelector("span[for='TermsAccept']"));
+            String actual = termsNotAgreed.getText();
+            String expected= "You must confirm that you have read and accepted our Terms and Conditions";
+            assertEquals(expected,actual);
         }
     }
 
