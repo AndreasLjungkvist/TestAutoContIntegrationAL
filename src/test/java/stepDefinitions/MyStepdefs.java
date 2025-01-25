@@ -7,6 +7,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import org.junit.*;
+
+import java.time.Duration;
 import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,6 +16,8 @@ import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -25,10 +29,9 @@ public class MyStepdefs {
     private WebDriver driver;
 
 
+
     @Given("I have the the web address and using a {string}")
     public void iAmTryingToJoinTheWebpage(String browser) {
-        this.browser = browser;
-
         if (browser.equals("Chrome")) {
             driver = new ChromeDriver();
         } else if (browser.equals("Firefox")) {
