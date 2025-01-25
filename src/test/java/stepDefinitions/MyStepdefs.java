@@ -45,21 +45,6 @@ public class MyStepdefs {
         driver.get("https://membership.basketballengland.co.uk/newsupporteraccount");
     }
 
-    @Then("I should join the site {string}")
-    public void iShouldJoinTheSite(String success) {
-        String expected;
-
-        WebElement welcomeMessage = driver.findElement(By.cssSelector("h2[class='bold  gray  text-center  margin-bottom-40']"));
-        String actual = welcomeMessage.getText();
-
-        if (success.equals("yes")){
-             expected= "THANK YOU FOR CREATING AN ACCOUNT WITH BASKETBALL ENGLAND";
-        }else {
-            expected = "";
-        }
-        assertEquals(expected,actual);
-    }
-
     @And("select a date")
     public void selectADate() throws InterruptedException {
         WebElement dateField = driver.findElement(By.cssSelector("[name='DateOfBirth']"));
@@ -163,5 +148,19 @@ public class MyStepdefs {
         WebElement emailField = driver.findElement(By.cssSelector("[id='member_confirmemailaddress']"));
         emailField.click();
         emailField.sendKeys(email);
+    }
+    @Then("I should join the site {string}")
+    public void iShouldJoinTheSite(String success) {
+        String expected;
+        String actual = "unsuccessful";
+
+        if (success.equals("yes")){
+            WebElement welcomeMessage = driver.findElement(By.cssSelector("h2[class='bold  gray  text-center  margin-bottom-40']"));
+            actual = welcomeMessage.getText();
+            expected= "THANK YOU FOR CREATING AN ACCOUNT WITH BASKETBALL ENGLAND";
+        }else {
+            expected = "unsuccessful";
+        }
+        assertEquals(expected,actual);
     }
 }

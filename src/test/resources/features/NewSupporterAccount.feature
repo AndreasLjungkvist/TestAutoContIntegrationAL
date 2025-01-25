@@ -23,7 +23,7 @@ Feature: NewSupporterAccount
       | browser | first | surname   | accordingly | check | successfully |
       | Chrome  | Johan | Eriksson  | correctly   | yes   | yes          |
       | Firefox | Erik  | Johansson | correctly   | yes   | yes          |
-      | Chrome  | Erik  | ""        | correctly   | yes   | no           |
+      | Chrome  | Erik  |           | correctly   | yes   | no           |
       | Chrome  | Erik  | Johansson | incorrectly | yes   | no           |
       | Chrome  | Erik  | Johansson | correctly   | no    | no           |
     
