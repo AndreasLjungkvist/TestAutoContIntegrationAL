@@ -1,30 +1,22 @@
 package stepDefinitions;
 
-import Common.NewSupportAccount;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import org.junit.*;
-
 import java.time.Duration;
 import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.sql.SQLOutput;
-import java.util.List;
-
 public class MyStepdefs {
 
-    //private NewSupportAccount basketballEngland;
     private String browser, firstName, lastName, email, password;
     private WebDriver driver;
 
@@ -49,14 +41,14 @@ public class MyStepdefs {
     public void selectADate() throws InterruptedException {
         WebElement dateField = driver.findElement(By.cssSelector("[name='DateOfBirth']"));
         dateField.click();
-        WebElement datePicker = driver.findElement(By.cssSelector(".datepicker-days .datepicker-switch"));
+        WebElement datePicker = (new WebDriverWait(driver,Duration.ofSeconds(5))).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".datepicker-days .datepicker-switch")));
         datePicker.click();
         WebElement datePickerPrev = driver.findElement(By.cssSelector(".datepicker-months .prev"));
-        WebElement yearDate = driver.findElement(By.cssSelector(".datepicker-switch"));
         for (int i = 0; i < 19; i++) {
             datePickerPrev.click();
         }
-        /*String year = yearDate.getText();
+        /*WebElement yearDate = driver.findElement(By.cssSelector(".datepicker-switch"));
+        String year = yearDate.getText();
         while (!year.equals("1992")){
             datePickerPrev.click();
             year = yearDate.getText();
@@ -101,7 +93,6 @@ public class MyStepdefs {
             password += randomLetter;
         }
         password += rand.nextInt(1000);
-
         WebElement passwordField = driver.findElement(By.cssSelector("[id='signupunlicenced_password']"));
         passwordField.click();
         passwordField.sendKeys(password);
@@ -149,6 +140,7 @@ public class MyStepdefs {
         emailField.click();
         emailField.sendKeys(email);
     }
+
     @Then("I should join the site {string}")
     public void iShouldJoinTheSite(String success) {
         String expected;
